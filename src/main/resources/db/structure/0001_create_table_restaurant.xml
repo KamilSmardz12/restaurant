@@ -12,10 +12,10 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="x" type="NUMBER(19,4)">
+            <column name="x" type="NUMBER(19,6)">
                 <constraints nullable="false"/>
             </column>
-            <column name="y" type="NUMBER(19,4)">
+            <column name="y" type="NUMBER(19,6)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
