@@ -9,7 +9,6 @@ import pl.smardz.restaurant.enums.Unit;
 import java.math.BigDecimal;
 
 public class DistanceCalculatorTest {
-
     @Test
     void calculateDistanceInKilometersTest() {
         final Point domostawa = Point.builder()
