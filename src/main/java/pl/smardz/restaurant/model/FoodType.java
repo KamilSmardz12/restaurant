@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 @Getter
 @Setter
@@ -14,9 +17,10 @@ import javax.persistence.*;
 @Entity(name = "FOOD_TYPES")
 public class FoodType {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "SEK_FOOD_TYPE")
     @Column(name = "food_id")
     private Long foodId;
+
     @Column(name = "food_type")
     private String foodType;
 
