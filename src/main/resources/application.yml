@@ -5,6 +5,9 @@ spring:
     password: password
   jpa:
     show-sql: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   liquibase:
     change-log: classpath:db/master.xml
     contexts: dev
