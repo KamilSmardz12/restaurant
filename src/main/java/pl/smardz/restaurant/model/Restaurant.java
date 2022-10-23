@@ -2,6 +2,7 @@ package pl.smardz.restaurant.model;
 
 import lombok.*;
 import org.springframework.lang.NonNull;
+import pl.smardz.restaurant.annotation.Transient;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -28,7 +29,9 @@ public class Restaurant {
 
     @NonNull
     private BigDecimal y;
-//    @Transient
+
+    @Transient
+    @Column(insertable = false)
     private BigDecimal distance;
 
     @NonNull

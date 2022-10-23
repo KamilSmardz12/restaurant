@@ -31,10 +31,9 @@ public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
             "  ) distance" +
             " FROM RESTAURANTS R" +
             " JOIN FOOD_TYPES FT ON FT.RESTAURANT_ID = R.RESTAURANT_ID" +
-            "  ORDER BY " +
-            " distance" +
-            " LIMIT :PM_LIMIT" +
-            " OFFSET :PM_OFFSET", nativeQuery = true)
+            "  ORDER BY distance" +
+            "  LIMIT :PM_LIMIT" +
+            "  OFFSET :PM_OFFSET", nativeQuery = true)
     List<Restaurant> findAllWithDistance(
             @Param(value = "PM_X") BigDecimal x,
             @Param(value = "PM_Y") BigDecimal y,

@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FindedRestaurantData {
+public class RestaurantData {
     private String name;
     private Point restaurantPoint;
     private Distance distance;

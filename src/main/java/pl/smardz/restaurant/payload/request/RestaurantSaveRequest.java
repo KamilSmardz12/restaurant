@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RestaurantRequestDataToSave {
+public class RestaurantSaveRequest {
     @NonNull
     private String name;
     @NonNull

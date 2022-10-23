@@ -18,9 +18,6 @@
             <column name="y" type="NUMBER(19,6)">
                 <constraints nullable="false"/>
             </column>
-            <column name="distance" type="NUMBER(19,6)">
-                <constraints nullable="true"/>
-            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>
