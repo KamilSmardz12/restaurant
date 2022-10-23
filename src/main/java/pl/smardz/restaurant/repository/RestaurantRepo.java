@@ -13,12 +13,10 @@ import java.util.List;
 public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
     @Query(value = "" +
             " SELECT" +
+            "  R.RESTAURANT_ID," +
             "  NAME," +
             "  X, " +
             "  Y, " +
-            "  FOOD_ID, " +
-            "  FOOD_TYPE, " +
-            "  R.RESTAURANT_ID," +
             "  (" +
             "  DEGREES(" +
             "          acos" +
@@ -28,9 +26,9 @@ public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
             "              )" +
             "          * 60 * 1.1515 * :PM_UNIT_MULTIPLIER) " +
             "  ) distance, " +
-            "  (FOOD_TYPE = :PM_FOOD_TYPE) IS_CORRECT_FOOD_TYPE" +
+            "  (SELECT 1 FROM FOOD_TYPES FT WHERE FT.RESTAURANT_ID = R.RESTAURANT_ID AND FOOD_TYPE = :PM_FOOD_TYPE) IS_CORRECT_FOOD_TYPE" +
             " FROM RESTAURANTS R" +
-            " JOIN FOOD_TYPES FT ON FT.RESTAURANT_ID = R.RESTAURANT_ID" +
+            "  WHERE EXISTS (SELECT 1 FROM FOOD_TYPES FT WHERE FT.RESTAURANT_ID = R.RESTAURANT_ID)"+
             "  ORDER BY IS_CORRECT_FOOD_TYPE desc, distance" +
             "  LIMIT :PM_LIMIT" +
             "  OFFSET :PM_OFFSET", nativeQuery = true)

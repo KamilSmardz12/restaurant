@@ -36,7 +36,7 @@ public class Restaurant {
 
     @Transient
     @Column(name = "IS_CORRECT_FOOD_TYPE",insertable = false)
-    private boolean isCorrectFoodType;
+    private Boolean isCorrectFoodType;
 
     @NonNull
     @OneToMany(cascade = CascadeType.ALL)
