@@ -30,6 +30,8 @@ public class RestaurantService {
                 .map(RepoMapper.ResponseMapper::mapToRestaurantData);
     }
 
+
+
     public List<RestaurantData> findRestaurants(RestaurantRequest restaurantRequest) {
         coordinatesValidator.validateTheXCoordinateValue(restaurantRequest.getX());
         coordinatesValidator.validateTheYCoordinateValue(restaurantRequest.getY());

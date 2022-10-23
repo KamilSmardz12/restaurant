@@ -4,17 +4,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import pl.smardz.restaurant.enums.Unit;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
 import pl.smardz.restaurant.payload.request.RestaurantSaveRequest;
 import pl.smardz.restaurant.payload.response.RestaurantData;
+import pl.smardz.restaurant.services.restaurant.CsvExportService;
 import pl.smardz.restaurant.services.restaurant.RestaurantService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 public class RestaurantController {
     private final RestaurantService service;
+    private final CsvExportService csvExportService;
 
     @PutMapping("/restaurant")
     public ResponseEntity<RestaurantData> saveRestaurant(
@@ -42,6 +47,28 @@ public class RestaurantController {
                         .foodType(requestData.getFoodType())
                         .build())
         );
+    }
+
+
+    @GetMapping("/restaurants/file")
+    public void restaurantsToFile(
+            HttpServletResponse servletResponse,
+            @RequestParam() String name,
+            @RequestParam() BigDecimal x,
+            @RequestParam() BigDecimal y,
+            @RequestParam(required = false) Unit unit,
+            @RequestParam(required = false) String foodType,
+            @RequestParam(required = false) Integer page
+    ) {
+        final RestaurantRequest restaurantRequest = RestaurantRequest.builder()
+                .page(page)
+                .x(x)
+                .y(y)
+                .unit(unit)
+                .foodType(foodType)
+                .build();
+
+        csvExportService.writeRestaurantsToCsv(servletResponse, name, restaurantRequest);
     }
 
 
