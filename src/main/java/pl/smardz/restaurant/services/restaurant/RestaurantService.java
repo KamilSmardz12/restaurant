@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class RestaurantService {
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 55;
     private final RestaurantRepo repo;
     private final CoordinatesValidator coordinatesValidator;
     private final OffsetCalculator offsetCalculator;
@@ -45,8 +45,14 @@ public class RestaurantService {
                 restaurantRequest.getX(),
                 restaurantRequest.getY(),
                 PAGE_SIZE,
-                offsetCalculator.calculateOffset(restaurantRequest, PAGE_SIZE)
+                offsetCalculator.calculateOffset(restaurantRequest, PAGE_SIZE),
+                determineValueOfFoodType(restaurantRequest)
         );
+    }
+
+    private String determineValueOfFoodType(RestaurantRequest restaurantRequest) {
+        return Optional.ofNullable(restaurantRequest.getFoodType())
+                .orElse("");
     }
 
 }

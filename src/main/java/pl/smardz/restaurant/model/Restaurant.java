@@ -34,6 +34,10 @@ public class Restaurant {
     @Column(insertable = false)
     private BigDecimal distance;
 
+    @Transient
+    @Column(name = "IS_CORRECT_FOOD_TYPE",insertable = false)
+    private boolean isCorrectFoodType;
+
     @NonNull
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_id", referencedColumnName = "restaurant_id", foreignKey = @ForeignKey(name = "fk_food_typ_restaurant_id"))

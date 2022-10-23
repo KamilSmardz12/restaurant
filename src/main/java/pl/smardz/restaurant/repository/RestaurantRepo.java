@@ -28,16 +28,19 @@ public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
             "              )" +
             "          * 60 * 1.1515 * 1.609344) " +
             //TODO add conversion to different units
-            "  ) distance" +
+            "  ) distance, " +
+//            "  (FOOD_TYPE = 'italian') IS_CORRECT_FOOD_TYPE" +
+            "  (FOOD_TYPE = :PM_FOOD_TYPE) IS_CORRECT_FOOD_TYPE" +
             " FROM RESTAURANTS R" +
             " JOIN FOOD_TYPES FT ON FT.RESTAURANT_ID = R.RESTAURANT_ID" +
-            "  ORDER BY distance" +
+            "  ORDER BY IS_CORRECT_FOOD_TYPE desc, distance" +
             "  LIMIT :PM_LIMIT" +
             "  OFFSET :PM_OFFSET", nativeQuery = true)
     List<Restaurant> findAllWithDistance(
             @Param(value = "PM_X") BigDecimal x,
             @Param(value = "PM_Y") BigDecimal y,
             @Param(value = "PM_LIMIT") Integer limit,
-            @Param(value = "PM_OFFSET") Integer offset
+            @Param(value = "PM_OFFSET") Integer offset,
+            @Param(value = "PM_FOOD_TYPE") String foodType
     );
 }
