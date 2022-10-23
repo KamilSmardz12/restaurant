@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
 import pl.smardz.restaurant.payload.request.RestaurantSaveRequest;
 import pl.smardz.restaurant.payload.response.RestaurantData;
-import pl.smardz.restaurant.services.RestaurantService;
+import pl.smardz.restaurant.services.restaurant.RestaurantService;
 
 import java.util.List;
 
@@ -31,11 +31,11 @@ public class RestaurantController {
     public ResponseEntity<List<RestaurantData>> findRestaurants(
             @RequestBody
             RestaurantRequest requestData,
-            @RequestParam(required = false) int page
+            @RequestParam(required = false) Integer page
     ) {
         return ResponseEntity.ok(service.findRestaurants(
                 RestaurantRequest.builder()
-                        .page(calculatePage(page))
+                        .page(page)
                         .x(requestData.getX())
                         .y(requestData.getY())
                         .unit(requestData.getUnit())
@@ -44,8 +44,5 @@ public class RestaurantController {
         );
     }
 
-    private int calculatePage(int page) {
-        return Math.max(page, 0);
-    }
 
 }

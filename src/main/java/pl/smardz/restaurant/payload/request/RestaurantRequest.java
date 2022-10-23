@@ -14,5 +14,5 @@ public class RestaurantRequest {
     private BigDecimal y;
     private Unit unit = Unit.KILOMETERS;
     private String foodType;
-    private int page;
+    private Integer page;
 }

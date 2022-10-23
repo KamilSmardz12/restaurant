@@ -1,17 +1,17 @@
-package pl.smardz.restaurant.services;
+package pl.smardz.restaurant.services.restaurant;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.smardz.restaurant.exceptions.RequestDataIsIncomplete;
 import pl.smardz.restaurant.mappers.RepoMapper;
 import pl.smardz.restaurant.model.Restaurant;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
 import pl.smardz.restaurant.payload.request.RestaurantSaveRequest;
 import pl.smardz.restaurant.payload.response.RestaurantData;
 import pl.smardz.restaurant.repository.RestaurantRepo;
+import pl.smardz.restaurant.services.calculators.OffsetCalculator;
+import pl.smardz.restaurant.validators.CoordinatesValidator;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 public class RestaurantService {
     private static final int PAGE_SIZE = 5;
     private final RestaurantRepo repo;
+    private final CoordinatesValidator coordinatesValidator;
+    private final OffsetCalculator offsetCalculator;
 
     @Transactional
     public Optional<RestaurantData> save(RestaurantSaveRequest restaurantData) {
@@ -29,8 +31,8 @@ public class RestaurantService {
     }
 
     public List<RestaurantData> findRestaurants(RestaurantRequest restaurantRequest) {
-        validateTheCoordinateValue(restaurantRequest.getX(), "X");
-        validateTheCoordinateValue(restaurantRequest.getY(), "Y");
+        coordinatesValidator.validateTheXCoordinateValue(restaurantRequest.getX());
+        coordinatesValidator.validateTheYCoordinateValue(restaurantRequest.getY());
 
         return findRestaurantsWithDistance(restaurantRequest)
                 .stream()
@@ -38,23 +40,13 @@ public class RestaurantService {
                 .collect(Collectors.toList());
     }
 
-    private BigDecimal validateTheCoordinateValue(BigDecimal coordinateValue, String coordinateName) {
-        return Optional.ofNullable(coordinateValue)
-                .orElseThrow(() -> new RequestDataIsIncomplete("Invalid value for " + coordinateName));
-    }
-
     private List<Restaurant> findRestaurantsWithDistance(RestaurantRequest restaurantRequest) {
         return repo.findAllWithDistance(
                 restaurantRequest.getX(),
                 restaurantRequest.getY(),
                 PAGE_SIZE,
-                calculateOffset(restaurantRequest)
+                offsetCalculator.calculateOffset(restaurantRequest, PAGE_SIZE)
         );
-    }
-
-    private int calculateOffset(RestaurantRequest restaurantRequest) {
-        int offset = restaurantRequest.getPage() > 0 ? restaurantRequest.getPage() : 1;
-        return PAGE_SIZE * offset;
     }
 
 }

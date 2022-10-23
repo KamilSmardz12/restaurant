@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import pl.smardz.restaurant.dto.Distance;
 import pl.smardz.restaurant.dto.Point;
 import pl.smardz.restaurant.enums.Unit;
-import pl.smardz.restaurant.services.DistanceCalculatorService;
+import pl.smardz.restaurant.services.distance.DistanceCalculatorService;
 
 import java.math.BigDecimal;
 
