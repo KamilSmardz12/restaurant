@@ -5,7 +5,6 @@ import pl.smardz.restaurant.payload.request.RestaurantRequest;
 
 @Service
 public class OffsetCalculator {
-
     public int calculateOffset(RestaurantRequest restaurantRequest, int pageSize) {
         Integer page = calculatePage(restaurantRequest.getPage());
         if (page.equals(0))

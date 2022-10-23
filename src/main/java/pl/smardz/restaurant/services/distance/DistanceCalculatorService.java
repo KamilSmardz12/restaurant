@@ -1,6 +1,5 @@
 package pl.smardz.restaurant.services.distance;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import pl.smardz.restaurant.dto.Distance;
 import pl.smardz.restaurant.dto.Point;

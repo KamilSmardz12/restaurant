@@ -1,10 +1,9 @@
 package pl.smardz.restaurant.services.restaurant;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import pl.smardz.restaurant.enums.CsvHeaders;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
@@ -16,27 +15,32 @@ import java.io.Writer;
 import java.util.stream.Stream;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
-public class CsvExportService {
-    private static final Logger logger = LoggerFactory.getLogger(CsvExportService.class);
-
+public class CsvRestaurantExportService {
     private final RestaurantService service;
 
-    public void writeRestaurantsToCsv(HttpServletResponse servletResponse, String fileName, RestaurantRequest restaurantRequest) {
+    public final HttpServletResponse export(HttpServletResponse response, String fileName, RestaurantRequest restaurantRequest) {
         try {
-            servletResponse.setContentType("text/csv");
-            servletResponse.addHeader("Content-Disposition", prepareHttpServletResponseHeader(fileName));
-            writeRestaurantsToCsv(servletResponse.getWriter(), restaurantRequest);
+            response.setContentType("text/csv");
+            response.addHeader("Content-Disposition", prepareHttpServletResponseHeader(fileName));
+            export(response.getWriter(), restaurantRequest);
+
+            log.info("The file " + fileName + "was successfully exported");
+
+            return response;
         } catch (IOException e) {
-            logger.error("Error while writing CSV ", e);
+            log.error("Error while writing CSV ", e);
         }
+
+        return response;
     }
 
     private String prepareHttpServletResponseHeader(String fileName) {
         return "attachment; filename=\"" + fileName + ".csv\"";
     }
 
-    private void writeRestaurantsToCsv(Writer writer, RestaurantRequest restaurantRequest) {
+    private void export(Writer writer, RestaurantRequest restaurantRequest) {
         final CSVFormat skipFormat = CSVFormat.DEFAULT
                 .withHeader(prepareHeaders());
 
@@ -52,7 +56,7 @@ public class CsvExportService {
                 );
             }
         } catch (IOException e) {
-            logger.error("Error while writing CSV ", e);
+            log.error("Error while writing CSV ", e);
         }
     }
 

@@ -8,7 +8,8 @@ import pl.smardz.restaurant.enums.Unit;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
 import pl.smardz.restaurant.payload.request.RestaurantSaveRequest;
 import pl.smardz.restaurant.payload.response.RestaurantData;
-import pl.smardz.restaurant.services.restaurant.CsvExportService;
+import pl.smardz.restaurant.services.restaurant.CsvRestaurantExportService;
+import pl.smardz.restaurant.services.restaurant.ExcelRestaurantService;
 import pl.smardz.restaurant.services.restaurant.RestaurantService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,8 @@ import java.util.List;
 @RestController
 public class RestaurantController {
     private final RestaurantService service;
-    private final CsvExportService csvExportService;
+    private final CsvRestaurantExportService csvExportService;
+    private final ExcelRestaurantService excelService;
 
     @PutMapping("/restaurant")
     public ResponseEntity<RestaurantData> saveRestaurant(
@@ -50,9 +52,9 @@ public class RestaurantController {
     }
 
 
-    @GetMapping("/restaurants/file")
-    public void restaurantsToFile(
-            HttpServletResponse servletResponse,
+    @GetMapping("/restaurants/csv")
+    public void restaurantsToCsv(
+            HttpServletResponse response,
             @RequestParam() String name,
             @RequestParam() BigDecimal x,
             @RequestParam() BigDecimal y,
@@ -68,7 +70,28 @@ public class RestaurantController {
                 .foodType(foodType)
                 .build();
 
-        csvExportService.writeRestaurantsToCsv(servletResponse, name, restaurantRequest);
+        csvExportService.export(response, name, restaurantRequest);
+    }
+
+    @GetMapping("/restaurants/excel")
+    public void restaurantsToExcel(
+            HttpServletResponse response,
+            @RequestParam() String name,
+            @RequestParam() BigDecimal x,
+            @RequestParam() BigDecimal y,
+            @RequestParam(required = false) Unit unit,
+            @RequestParam(required = false) String foodType,
+            @RequestParam(required = false) Integer page
+    ) {
+        final RestaurantRequest restaurantRequest = RestaurantRequest.builder()
+                .page(page)
+                .x(x)
+                .y(y)
+                .unit(unit)
+                .foodType(foodType)
+                .build();
+
+        excelService.export(response, restaurantRequest, name);
     }
 
 
