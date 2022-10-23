@@ -35,7 +35,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants")
-    public ResponseEntity<List<RestaurantData>> findRestaurants(
+    public ResponseEntity<List<RestaurantData>> findRestaurantsWithDistanceCalculate(
             @RequestBody
             RestaurantRequest requestData,
             @RequestParam(required = false) Integer page

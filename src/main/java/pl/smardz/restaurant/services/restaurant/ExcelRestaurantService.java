@@ -9,7 +9,8 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
-import pl.smardz.restaurant.enums.CsvHeaders;
+import pl.smardz.restaurant.enums.FileHeaders;
+import pl.smardz.restaurant.exceptions.ExportErrorException;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
 import pl.smardz.restaurant.payload.response.RestaurantData;
 
@@ -21,6 +22,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
+
 public class ExcelRestaurantService {
     private static final int HEADERS_FONT_HEIGHT = 16;
     private static final int ROWS_FONT_HEIGHT = 16;
@@ -42,17 +44,15 @@ public class ExcelRestaurantService {
             String headerKey = "Content-Disposition";
             String headerValue = "attachment; fileName=" + fileName + ".xlsx";
             response.setHeader(headerKey, headerValue);
-
             export(response, restaurantRequest);
 
             log.info("The file " + fileName + "was successfully exported");
 
             return response;
         } catch (IOException e) {
-            log.error("Error while writing xlsx ", e);
+            log.error("Error exporting XSLT file", e);
+            throw new ExportErrorException("Error exporting XSLT file");
         }
-
-        return response;
     }
 
     private void export(HttpServletResponse response, RestaurantRequest restaurantRequest) throws IOException {
@@ -69,7 +69,7 @@ public class ExcelRestaurantService {
     private void writeHeaderLine() {
         final Row row = sheet.createRow(0);
         final CellStyle style = configureStyleHeaders();
-        final CsvHeaders[] headers = CsvHeaders.values();
+        final FileHeaders[] headers = FileHeaders.values();
 
         for (int i = 0; i < headers.length; i++) {
             createCell(sheet, row, i, headers[i].name(), style);

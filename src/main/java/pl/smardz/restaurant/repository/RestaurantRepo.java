@@ -29,7 +29,6 @@ public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
             "          * 60 * 1.1515 * 1.609344) " +
             //TODO add conversion to different units
             "  ) distance, " +
-//            "  (FOOD_TYPE = 'italian') IS_CORRECT_FOOD_TYPE" +
             "  (FOOD_TYPE = :PM_FOOD_TYPE) IS_CORRECT_FOOD_TYPE" +
             " FROM RESTAURANTS R" +
             " JOIN FOOD_TYPES FT ON FT.RESTAURANT_ID = R.RESTAURANT_ID" +

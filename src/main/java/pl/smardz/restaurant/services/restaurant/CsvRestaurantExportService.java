@@ -5,7 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.stereotype.Service;
-import pl.smardz.restaurant.enums.CsvHeaders;
+import pl.smardz.restaurant.enums.FileHeaders;
+import pl.smardz.restaurant.exceptions.ExportErrorException;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
 import pl.smardz.restaurant.payload.response.RestaurantData;
 
@@ -30,10 +31,9 @@ public class CsvRestaurantExportService {
 
             return response;
         } catch (IOException e) {
-            log.error("Error while writing CSV ", e);
+            log.error("Error exporting CSV file", e);
+            throw new ExportErrorException("Error exporting CSV file");
         }
-
-        return response;
     }
 
     private String prepareHttpServletResponseHeader(String fileName) {
@@ -56,13 +56,14 @@ public class CsvRestaurantExportService {
                 );
             }
         } catch (IOException e) {
-            log.error("Error while writing CSV ", e);
+            log.error("Error exporting CVS file", e);
+            throw new ExportErrorException("Error exporting CVS file");
         }
     }
 
     private String[] prepareHeaders() {
-        return Stream.of(CsvHeaders.values())
-                .map(CsvHeaders::name)
+        return Stream.of(FileHeaders.values())
+                .map(FileHeaders::name)
                 .toArray(String[]::new);
     }
 

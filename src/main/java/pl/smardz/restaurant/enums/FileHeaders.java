@@ -1,6 +1,6 @@
 package pl.smardz.restaurant.enums;
 
-public enum CsvHeaders {
+public enum FileHeaders {
     NAME,
     X,
     Y,

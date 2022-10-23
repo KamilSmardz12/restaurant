@@ -13,6 +13,7 @@ import pl.smardz.restaurant.services.calculators.OffsetCalculator;
 import pl.smardz.restaurant.validators.CoordinatesValidator;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class RestaurantService {
-    private static final int PAGE_SIZE = 55;
+    private static final int PAGE_SIZE = 5;
     private final RestaurantRepo repo;
     private final CoordinatesValidator coordinatesValidator;
     private final OffsetCalculator offsetCalculator;
@@ -37,7 +38,9 @@ public class RestaurantService {
         coordinatesValidator.validateTheXCoordinateValue(restaurantRequest.getX());
         coordinatesValidator.validateTheYCoordinateValue(restaurantRequest.getY());
 
+        log.info("Start of downloading restaurant data: " + LocalDateTime.now());
         final List<Restaurant> restaurants = findRestaurantsWithDistance(restaurantRequest);
+        log.info("End of restaurant data download: " + LocalDateTime.now());
 
         log.info("The restaurant data has been correctly retrieved");
 

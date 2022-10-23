@@ -3,7 +3,7 @@ package pl.smardz.restaurant.calculators.distance.pl.smardz.restaurant.validator
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import pl.smardz.restaurant.exceptions.RequestDataIsIncomplete;
+import pl.smardz.restaurant.exceptions.IncompleteDataRequestException;
 import pl.smardz.restaurant.validators.CoordinatesValidator;
 
 import java.math.BigDecimal;
@@ -23,8 +23,8 @@ public class CoordinatesValidatorTest {
 
     @Test
     void invalidValueOfTheXCoordinationVariableTest() {
-        RequestDataIsIncomplete exception = assertThrows(
-                RequestDataIsIncomplete.class,
+        IncompleteDataRequestException exception = assertThrows(
+                IncompleteDataRequestException.class,
                 () -> coordinatesValidator.validateTheXCoordinateValue(null)
         );
 
@@ -38,8 +38,8 @@ public class CoordinatesValidatorTest {
 
     @Test
     void invalidValueOfTheYCoordinationVariableTest() {
-        RequestDataIsIncomplete exception = assertThrows(
-                RequestDataIsIncomplete.class,
+        IncompleteDataRequestException exception = assertThrows(
+                IncompleteDataRequestException.class,
                 () -> coordinatesValidator.validateTheYCoordinateValue(null)
         );
 

@@ -1,7 +1,7 @@
 package pl.smardz.restaurant.validators;
 
 import org.springframework.stereotype.Service;
-import pl.smardz.restaurant.exceptions.RequestDataIsIncomplete;
+import pl.smardz.restaurant.exceptions.IncompleteDataRequestException;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -22,6 +22,6 @@ public class CoordinatesValidator {
 
     private void validateTheCoordinateValue(BigDecimal coordinateValue, String coordinateName) {
         Optional.ofNullable(coordinateValue)
-                .orElseThrow(() -> new RequestDataIsIncomplete(INVALID_VALUE_FOR + coordinateName));
+                .orElseThrow(() -> new IncompleteDataRequestException(INVALID_VALUE_FOR + coordinateName));
     }
 }

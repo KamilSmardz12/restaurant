@@ -5,15 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pl.smardz.restaurant.exceptions.IncompleteDataRequestException;
+import pl.smardz.restaurant.exceptions.ExportErrorException;
 
 @ControllerAdvice
 @Slf4j
-public class DataRequestIsNullAdvice {
-    @ExceptionHandler(IncompleteDataRequestException.class)
+public class ErrorExportAdvice {
+    @ExceptionHandler(ExportErrorException.class)
     public ResponseEntity<?> couldNotSaveRestaurantException(Throwable ex) {
         log.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
