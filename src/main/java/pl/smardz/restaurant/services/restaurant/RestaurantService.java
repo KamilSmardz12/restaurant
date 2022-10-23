@@ -1,6 +1,7 @@
 package pl.smardz.restaurant.services.restaurant;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pl.smardz.restaurant.mappers.RepoMapper;
 import pl.smardz.restaurant.model.Restaurant;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class RestaurantService {
     private static final int PAGE_SIZE = 55;
@@ -31,12 +33,15 @@ public class RestaurantService {
     }
 
 
-
     public List<RestaurantData> findRestaurants(RestaurantRequest restaurantRequest) {
         coordinatesValidator.validateTheXCoordinateValue(restaurantRequest.getX());
         coordinatesValidator.validateTheYCoordinateValue(restaurantRequest.getY());
 
-        return findRestaurantsWithDistance(restaurantRequest)
+        final List<Restaurant> restaurants = findRestaurantsWithDistance(restaurantRequest);
+
+        log.info("The restaurant data has been correctly retrieved");
+
+        return restaurants
                 .stream()
                 .map(RepoMapper.ResponseMapper::mapToRestaurantData)
                 .collect(Collectors.toList());
