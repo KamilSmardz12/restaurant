@@ -9,6 +9,9 @@ import java.util.Set;
 
 public class RepoMapper {
 
+    private RepoMapper() {
+    }
+
     public static Restaurant map(RestaurantRequestDataToSave restaurantData) {
         Set<FoodType> foodTypes = new HashSet<>();
         FoodType foodType = createFoodType(restaurantData);

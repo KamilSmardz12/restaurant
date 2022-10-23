@@ -11,7 +11,6 @@ import pl.smardz.restaurant.payload.request.RestaurantRequestDataToSave;
 import pl.smardz.restaurant.payload.response.FindedRestaurantData;
 import pl.smardz.restaurant.services.RestaurantService;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -36,7 +35,8 @@ public class RestaurantController {
             @RequestParam BigDecimal x,
             @RequestParam BigDecimal y,
             @RequestParam Unit unit,
-            @RequestParam String foodType
+            @RequestParam String foodType,
+            @RequestParam int pageNr
     ) {
 
         RestaurantRequestDataToFindRestaurant restaurantRequestDataToFindRestaurant = RestaurantRequestDataToFindRestaurant.builder()
@@ -44,6 +44,7 @@ public class RestaurantController {
                 .y(y)
                 .unit(unit)
                 .foodType(foodType)
+                .pageNr(pageNr)
                 .build();
 
         return ResponseEntity.ok(service.findAll(restaurantRequestDataToFindRestaurant));
@@ -53,10 +54,22 @@ public class RestaurantController {
     public ResponseEntity<Set<FindedRestaurantData>> findAllRestaurants(
             @Validated
             @RequestBody
-            RestaurantRequestDataToFindRestaurant restaurantRequestData
+            RestaurantRequestDataToFindRestaurant restaurantRequestData,
+            @RequestParam(required = false) int pageNr
     ) {
+        return ResponseEntity.ok(service.findAll(
+                RestaurantRequestDataToFindRestaurant.builder()
+                        .pageNr(calculatePageNr(pageNr))
+                        .x(restaurantRequestData.getX())
+                        .y(restaurantRequestData.getY())
+                        .unit(restaurantRequestData.getUnit())
+                        .foodType(restaurantRequestData.getFoodType())
+                        .build())
+        );
+    }
 
-        return ResponseEntity.ok(service.findAll(restaurantRequestData));
+    private int calculatePageNr(int pageNr) {
+        return Math.max(pageNr, 0);
     }
 
 }

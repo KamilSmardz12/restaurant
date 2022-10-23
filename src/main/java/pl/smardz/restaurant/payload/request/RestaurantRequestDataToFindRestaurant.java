@@ -17,4 +17,5 @@ public class RestaurantRequestDataToFindRestaurant {
     private BigDecimal y;
     private Unit unit = Unit.KILOMETERS;
     private String foodType;
+    private int pageNr;
 }

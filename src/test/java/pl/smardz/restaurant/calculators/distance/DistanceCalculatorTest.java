@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import pl.smardz.restaurant.dto.Distance;
 import pl.smardz.restaurant.dto.Point;
 import pl.smardz.restaurant.enums.Unit;
+import pl.smardz.restaurant.services.DistanceCalculatorService;
 
 import java.math.BigDecimal;
 
 public class DistanceCalculatorTest {
+    private final DistanceCalculatorService distanceCalculator =  new DistanceCalculatorService();
     @Test
     void calculateDistanceInKilometersTest() {
         final Point domostawa = Point.builder()
@@ -20,7 +22,7 @@ public class DistanceCalculatorTest {
                 .y(BigDecimal.valueOf(21.737200))
                 .build();
 
-        final Distance calculatedDistance = DistanceCalculator.calculate(domostawa, sandomierz, Unit.KILOMETERS);
+        final Distance calculatedDistance = distanceCalculator.calculate(domostawa, sandomierz, Unit.KILOMETERS);
         final Distance expectedDistance = Distance.builder()
                 .unit(Unit.KILOMETERS)
                 .distance(BigDecimal.valueOf(39.1707))
@@ -40,7 +42,7 @@ public class DistanceCalculatorTest {
                 .y(BigDecimal.valueOf(21.737200))
                 .build();
 
-        final Distance calculatedDistance = DistanceCalculator.calculate(domostawa, sandomierz, Unit.MILES);
+        final Distance calculatedDistance = distanceCalculator.calculate(domostawa, sandomierz, Unit.MILES);
         final Distance expectedDistance = Distance.builder()
                 .unit(Unit.MILES)
                 .distance(BigDecimal.valueOf(24.3395))
@@ -60,7 +62,7 @@ public class DistanceCalculatorTest {
                 .y(BigDecimal.valueOf(21.737200))
                 .build();
 
-        final Distance calculatedDistance = DistanceCalculator.calculate(domostawa, sandomierz, Unit.NAUTICAL);
+        final Distance calculatedDistance = distanceCalculator.calculate(domostawa, sandomierz, Unit.NAUTICAL);
         final Distance expectedDistance = Distance.builder()
                 .unit(Unit.NAUTICAL)
                 .distance(BigDecimal.valueOf(21.1365))

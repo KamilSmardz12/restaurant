@@ -12,7 +12,7 @@
             <column name="food_type" type="java.lang.String">
                 <constraints nullable="false"/>
             </column>
-            <column name="restaurant_id" type="java.lang.Long">
+            <column name="RESTAURANT_ID" type="java.lang.Long">
             </column>
         </createTable>
     </changeSet>

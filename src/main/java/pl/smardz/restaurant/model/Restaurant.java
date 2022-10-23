@@ -28,6 +28,8 @@ public class Restaurant {
 
     @NonNull
     private BigDecimal y;
+//    @Transient
+    private BigDecimal distance;
 
     @NonNull
     @OneToMany(cascade = CascadeType.ALL)
