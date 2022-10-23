@@ -3,7 +3,9 @@ package pl.smardz.restaurant.services.restaurant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import pl.smardz.restaurant.enums.Unit;
 import pl.smardz.restaurant.mappers.RepoMapper;
+import pl.smardz.restaurant.mappers.ResponseMapper;
 import pl.smardz.restaurant.model.FoodType;
 import pl.smardz.restaurant.model.Restaurant;
 import pl.smardz.restaurant.payload.request.RestaurantRequest;
@@ -15,6 +17,7 @@ import pl.smardz.restaurant.services.calculators.OffsetCalculator;
 import pl.smardz.restaurant.validators.CoordinatesValidator;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -30,11 +33,13 @@ public class RestaurantService {
     private final FoodTypeRepo foodTypeRepo;
     private final CoordinatesValidator coordinatesValidator;
     private final OffsetCalculator offsetCalculator;
+    private final ResponseMapper responseMapper;
+    private final RepoMapper repoMapper;
 
     @Transactional
     public Optional<RestaurantData> save(RestaurantSaveRequest restaurantData) {
-        return Optional.of(restaurantRepo.save(RepoMapper.map(restaurantData)))
-                .map(RepoMapper.ResponseMapper::mapToRestaurantData);
+        return Optional.of(restaurantRepo.save(repoMapper.map(restaurantData)))
+                .map(responseMapper::mapToRestaurantData);
     }
 
 
@@ -50,7 +55,7 @@ public class RestaurantService {
 
         return restaurants
                 .stream()
-                .map(RepoMapper.ResponseMapper::mapToRestaurantData)
+                .map(responseMapper::mapToRestaurantData)
                 .collect(Collectors.toList());
     }
 
@@ -82,9 +87,15 @@ public class RestaurantService {
                 restaurantRequest.getY(),
                 PAGE_SIZE,
                 offsetCalculator.calculateOffset(restaurantRequest, PAGE_SIZE),
-                restaurantRequest.getUnit().getMultiplier(),
+                determineMultiplier(restaurantRequest),
                 determineValueOfFoodType(restaurantRequest)
         );
+    }
+
+    private static BigDecimal determineMultiplier(RestaurantRequest restaurantRequest) {
+        return Optional.ofNullable(restaurantRequest.getUnit())
+                .map(Unit::getMultiplier)
+                .orElse(Unit.KILOMETERS.getMultiplier());
     }
 
     private String determineValueOfFoodType(RestaurantRequest restaurantRequest) {
