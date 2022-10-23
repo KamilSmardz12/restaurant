@@ -56,6 +56,7 @@ public class RestaurantService {
                 restaurantRequest.getY(),
                 PAGE_SIZE,
                 offsetCalculator.calculateOffset(restaurantRequest, PAGE_SIZE),
+                restaurantRequest.getUnit().getMultiplier(),
                 determineValueOfFoodType(restaurantRequest)
         );
     }

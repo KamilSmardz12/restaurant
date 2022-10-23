@@ -26,8 +26,7 @@ public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
             "                sin(radians(X)) * sin(radians(:PM_X)) + cos(radians(X))" +
             "                * cos(radians(:PM_X)) * cos(radians(Y-:PM_Y)) " +
             "              )" +
-            "          * 60 * 1.1515 * 1.609344) " +
-            //TODO add conversion to different units
+            "          * 60 * 1.1515 * :PM_UNIT_MULTIPLIER) " +
             "  ) distance, " +
             "  (FOOD_TYPE = :PM_FOOD_TYPE) IS_CORRECT_FOOD_TYPE" +
             " FROM RESTAURANTS R" +
@@ -40,6 +39,7 @@ public interface RestaurantRepo extends CrudRepository<Restaurant, Long> {
             @Param(value = "PM_Y") BigDecimal y,
             @Param(value = "PM_LIMIT") Integer limit,
             @Param(value = "PM_OFFSET") Integer offset,
+            @Param(value = "PM_UNIT_MULTIPLIER") BigDecimal unitMultiplier,
             @Param(value = "PM_FOOD_TYPE") String foodType
     );
 }
